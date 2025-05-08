@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updated Sci-Fi Hacker UI Loader</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at center, #001a1a, #000);
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+        }
+
+        .loader-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .core {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ffcc, #006666);
+            box-shadow: 0 0 30px #00ffcc, 0 0 60px #006666;
+            animation: pulse-core 1.6s infinite ease-in-out, rotate-core 8s linear infinite;
+            transform-style: preserve-3d;
+        }
+
+        .holo-ring {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border: 3px solid transparent;
+            border-top-color: #ff007a;
+            border-bottom-color: #ff007a;
+            border-radius: 50%;
+            animation: spin 2.5s linear infinite;
+        }
+
+        .holo-ring:nth-child(2) {
+            width: 260px;
+            height: 260px;
+            border-top-color: #00ffcc;
+            border-bottom-color: #00ffcc;
+            animation-delay: 0.4s;
+            animation-direction: reverse;
+        }
+
+        .digital-rain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .rain-drop {
+            position: absolute;
+            color: #00ffcc;
+            font-size: 15px;
+            opacity: 0.7;
+            animation: fall 2s linear infinite;
+        }
+
+        .rain-drop:nth-child(1) { left: 15%; animation-delay: 0s; }
+        .rain-drop:nth-child(2) { left: 30%; animation-delay: 0.3s; }
+        .rain-drop:nth-child(3) { left: 45%; animation-delay: 0.6s; }
+        .rain-drop:nth-child(4) { left: 60%; animation-delay: 0.9s; }
+        .rain-drop:nth-child(5) { left: 75%; animation-delay: 1.2s; }
+
+        .data-stream {
+            position: absolute;
+            color: #00ffcc;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.8;
+            text-shadow: 0 0 5px #00ffcc;
+            animation: stream 3.5s linear infinite;
+        }
+
+        .data-stream:nth-child(7) { top: -70px; animation-delay: 0.5s; }
+        .data-stream:nth-child(8) { bottom: -70px; animation-delay: 1s; }
+
+        @keyframes pulse-core {
+            0%, 100% { transform: scale(1) rotateX(45deg) rotateY(45deg); box-shadow: 0 0 30px #00ffcc, 0 0 60px #006666; }
+            50% { transform: scale(1.3) rotateX(45deg) rotateY(45deg); box-shadow: 0 0 50px #00ffcc, 0 0 80px #006666; }
+        }
+
+        @keyframes rotate-core {
+            0% { transform: rotateX(45deg) rotateY(0deg); }
+            100% { transform: rotateX(45deg) rotateY(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100%); opacity: 0.7; }
+            100% { transform: translateY(100%); opacity: 0.2; }
+        }
+
+        @keyframes stream {
+            0% { transform: translateY(0); opacity: 0.8; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-120px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="core"></div>
+        <div class="holo-ring"></div>
+        <div class="holo-ring"></div>
+        <div class="digital-rain">
+            <div class="rain-drop">101010</div>
+            <div class="rain-drop">010101</div>
+            <div class="rain-drop">110011</div>
+            <div class="rain-drop">001100</div>
+            <div class="rain-drop">111000</div>
+        </div>
+        <div class="data-stream" id="stream1">Initializing Neural Net...</div>
+        <div class="data-stream" id="stream2">Establishing Quantum Link...</div>
+    </div>
+
+    <audio id="sci-fi-hum" loop>
+        <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3c8e3df57b.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="custom-sound">
+        <source src="custom-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const messages = [
+            "Initializing Neural Net...",
+            "Establishing Quantum Link...",
+            "Bypassing Security Protocols...",
+            "Hacking Mainframe...",
+            "Decrypting Data Stream...",
+            "Syncing with Core..."
+        ];
+
+        const humAudio = document.getElementById("sci-fi-hum");
+        const customAudio = document.getElementById("custom-sound");
+
+        // Play ambient hum on load
+        window.addEventListener('load', () => {
+            humAudio.volume = 0.4; // Moderate volume for hum
+            humAudio.play().catch((error) => {
+                console.log("Hum autoplay prevented: ", error);
+                document.addEventListener('click', () => {
+                    humAudio.play();
+                }, { once: true });
+            });
+        });
+
+        // Update data stream text and play custom sound
+        function updateStream() {
+            const stream1 = document.getElementById("stream1");
+            const stream2 = document.getElementById("stream2");
+            const randomMsg1 = messages[Math.floor(Math.random() * messages.length)];
+            const randomMsg2 = messages[Math.floor(Math.random() * messages.length)];
+            stream1.textContent = randomMsg1;
+            stream2.textContent = randomMsg2;
+
+            // Play custom sound on text change
+            // customAudio.currentTime = 16; // Reset to start
+            customAudio.volume = 0.4; // Slightly louder for custom sound
+            customAudio.play().catch((error) => {
+                console.log("Custom sound playback failed: ", error);
+            });
+        }
+
+        setInterval(updateStream, 3000); // Update text and play custom sound every 3 seconds
+    </script>
+</body>
+</html>
